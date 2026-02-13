@@ -5,9 +5,21 @@
 //// 2) input the player and CPU objects so their choices load up in the board (first in console)
 //// 3) create game systems to count wins from each players and set a max of 5 rounds
 
+const display = function () {
+  const grid = document.querySelector(".grid");
+  grid.innerHTML = "";
+  GameBoard.gridReturn().forEach((element) => {
+    let gridItem = document.createElement("p");
+    console.log(element);
+    gridItem.classList.add("cell");
+    gridItem.textContent = element;
+    grid.append(gridItem);
+  });
+};
+
 const GameBoard = (function () {
   const maker = {
-    board: [1,2,3,4,5,6,7,8,9],
+    board: [1, 2, 3, 4, 5, 6, 7, 8, 9],
   };
   function gridSetter(index, mark) {
     maker.board[index] = mark;
@@ -23,8 +35,7 @@ const GameBoard = (function () {
     }
     return output;
   }
-   gridReturn = () => maker.board;
-  
+  gridReturn = () => maker.board;
 
   gridMaker(maker.board);
 
@@ -36,14 +47,14 @@ const GameBoard = (function () {
 })();
 
 const player = function (name) {
-  let pName = name
-  let turn = 0
-  const getName = ()=> pName
-  const getTurn =  () => turn;
-  const addTurn =  () => turn++;
-  const Select = (el) => choice = el;
-  const getSelect = ()=> choice;
- 
+  let pName = name;
+  let turn = 0;
+  const getName = () => pName;
+  const getTurn = () => turn;
+  const addTurn = () => turn++;
+  const Select = (el) => (choice = el);
+  const getSelect = () => choice;
+
   return {
     getName,
     getTurn,
@@ -54,9 +65,8 @@ const player = function (name) {
 };
 
 function game(p1, p2) {
-  let ActualPlayer = ""
-  generalTurn = 0
-  console.log("Welcome to tic tac toe");
+  let ActualPlayer = "";
+  generalTurn = 0;
   let player1 = player(p1);
   let player2 = player(p2);
   const patterns = [
@@ -70,39 +80,32 @@ function game(p1, p2) {
     [2, 4, 6],
   ];
 
-  function checkPattern(board){
-    return patterns.some(pattern=>{
-      const[a,b,c] = pattern;
-      return (board[a]===board[b]
-          && board[b]===board[c]
-          && typeof board[a]==="string")
-    })
+  function checkPattern(board) {
+    return patterns.some((pattern) => {
+      const [a, b, c] = pattern;
+      return (
+        board[a] === board[b] &&
+        board[b] === board[c] &&
+        typeof board[a] === "string"
+      );
+    });
   }
 
-  function checkWinner(){
-  if( checkPattern(GameBoard.gridReturn())){
-    return(` \x1b[32m${ActualPlayer}\x1b[0m has won!` )
-    
+  function checkWinner() {
+    if (checkPattern(GameBoard.gridReturn())) {
+      return ` \x1b[32m${ActualPlayer}\x1b[0m has won!`;
+    } else {
+      return "game keeps going";
+    }
   }
-  else {return "game keeps going" }
-  
-  }
- addGTurn = ()=>  generalTurn++
+  addGTurn = () => generalTurn++;
   function play(player) {
-    player.addTurn()
-    console.log("Turn #",player.getTurn())
-    console.log(`player \x1b[32m${player.getName()}\x1b[0m, make your move \n available options:\n`, GameBoard.gridMaker());
-    console.log();
-    addGTurn()
-    ActualPlayer=player.getName()
+    player.addTurn();
+    addGTurn();
 
-    console.log("actual player is", ActualPlayer)
-  
+    ActualPlayer = player.getName();
   }
-  
-  
 
-  console.log(GameBoard.gridMaker());
   return {
     player1,
     player2,
@@ -115,8 +118,13 @@ function game(p1, p2) {
 const myGame = game("pepe", "juan");
 myGame.play(myGame.player1);
 myGame.play(myGame.player2);
+GameBoard.gridSetter(4, "x");
+GameBoard.gridSetter(5, "x");
+GameBoard.gridSetter(3, "x");
+console.log(GameBoard.gridMaker(GameBoard.gridReturn));
 
+console.log(myGame.checkWinner());
 
-console.log(myGame.checkWinner())
+display();
 
-// console.log("\x1b[37mTurno del jugador X\x1b[0m");
+// console.log("\x1b[37m player turn X\x1b[0m");

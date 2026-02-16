@@ -5,6 +5,16 @@
 //// 2) input the player and CPU objects so their choices load up in the board (first in console)
 //// 3) create game systems to count wins from each players and set a max of 5 rounds
 
+
+
+let setting = document.querySelector("#setter")
+let info = document.querySelector(".info")
+setting.addEventListener("click",()=>{
+  info.forEach(element => {
+  elemen
+});
+})
+
 const display = function () {
   const grid = document.querySelector(".grid");
   grid.innerHTML = "";
@@ -13,8 +23,26 @@ const display = function () {
     console.log(element);
     gridItem.classList.add("cell");
     gridItem.textContent = element;
+    gridItem.addEventListener("click",()=>{
+      gridItem.textContent = player.getMark
+      game.play
+    })
     grid.append(gridItem);
   });
+
+  function names(p1,p2){
+   const play1 = document.createElement("h2")
+    play1.classList.add("players")
+    play1.textContent = p1
+   const  play2 = document.createElement("h2")
+    play2.classList.add("players")
+    play2.textContent = p2
+    document.querySelector(".playerContainer").append(play1,play2)
+  }
+  return {
+    names,
+
+  }
 };
 
 const GameBoard = (function () {
@@ -46,10 +74,13 @@ const GameBoard = (function () {
   };
 })();
 
-const player = function (name) {
+
+const player = function (name,mark) {
   let pName = name;
+  let pMark = mark;
   let turn = 0;
   const getName = () => pName;
+  const getMark = () => pMark;
   const getTurn = () => turn;
   const addTurn = () => turn++;
   const Select = (el) => (choice = el);
@@ -57,6 +88,7 @@ const player = function (name) {
 
   return {
     getName,
+    getMark,
     getTurn,
     addTurn,
     Select,
@@ -64,11 +96,12 @@ const player = function (name) {
   };
 };
 
-function game(p1, p2) {
+function game(p1,mk1,p2,mk2) {
+
   let ActualPlayer = "";
   generalTurn = 0;
-  let player1 = player(p1);
-  let player2 = player(p2);
+  let player1 = player(p1,mk1);
+  let player2 = player(p2,mk2);
   const patterns = [
     [0, 1, 2],
     [3, 4, 5],
@@ -102,7 +135,7 @@ function game(p1, p2) {
   function play(player) {
     player.addTurn();
     addGTurn();
-
+    
     ActualPlayer = player.getName();
   }
 
@@ -115,16 +148,22 @@ function game(p1, p2) {
     checkWinner,
   };
 }
-const myGame = game("pepe", "juan");
-myGame.play(myGame.player1);
-myGame.play(myGame.player2);
-GameBoard.gridSetter(4, "x");
-GameBoard.gridSetter(5, "x");
-GameBoard.gridSetter(3, "x");
-console.log(GameBoard.gridMaker(GameBoard.gridReturn));
+const myGame = game('john',"x", 'rambo',"O")
 
-console.log(myGame.checkWinner());
+display.names(
+  myGame.player1.getName(),
+  myGame.player2.getName()
+);
+// const myGame = game("pepe", "juan");
+// myGame.play(myGame.player1);
+// myGame.play(myGame.player2);
+// GameBoard.gridSetter(4, "x");
+// GameBoard.gridSetter(5, "x");
+// GameBoard.gridSetter(3, "x");
+// console.log(GameBoard.gridMaker(GameBoard.gridReturn));
 
-display();
+// console.log(myGame.checkWinner());
+
+
 
 // console.log("\x1b[37m player turn X\x1b[0m");

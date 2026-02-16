@@ -1,21 +1,27 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
     <title>Document</title>
-</head>
-<body>
+  </head>
+  <body>
     <h1>tic tac toe</h1>
-    <div class="container">
-        <div class="grid">
-           
-        </div>
+    <div class="info">
+        <label for="p1name">player 1 name <input type="text" /></label>
+        <label for="p1mark">mark<input type="text" /></label>
+        <label for="p2name">player 2 name<input type="text" /></label>
+        <label for="p2mark">mark<input type="text" /></label>
+        <button id="setter" type="button">submit</button>
     </div>
 
-
+    <div class="container">
+      <div class="grid"></div>
+    </div>
+    <div class="playerContainer"></div>
+    <h3 class="info"></h3>
 
     <script src="script.js"></script>
-</body>
+  </body>
 </html>

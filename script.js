@@ -1,56 +1,88 @@
-////Tic-Tac-Toe game
-//// 1) create table
-//// 1.2) create a way to replace a number with an X or O
-//// 1.2.1)
-//// 2) input the player and CPU objects so their choices load up in the board (first in console)
-//// 3) create game systems to count wins from each players and set a max of 5 rounds
 
+let setting = document.querySelector("#setter");
+let info = document.querySelector(".info");
+setting.addEventListener("click", () => {
+  const p1Container = document.querySelector(".p1");
+  const p1NameInput = document.querySelector("#player1");
+  const p1MarkInput = document.querySelector("#mark1");
+  const p1Paragraph = p1Container.querySelector("p");
 
+  p1Paragraph.textContent = `Player 1: ${p1NameInput.value} (${p1MarkInput.value})`;
 
-let setting = document.querySelector("#setter")
-let info = document.querySelector(".info")
-setting.addEventListener("click",()=>{
-  info.forEach(element => {
-  elemen
+  p1Paragraph.hidden = false;
+
+  p1NameInput.hidden = true;
+  p1MarkInput.hidden = true;
+
+  const p2Container = document.querySelector(".p2");
+  const p2NameInput = document.querySelector("#player2");
+  const p2MarkInput = document.querySelector("#mark2");
+  const p2Paragraph = p2Container.querySelector("p");
+
+  p2Paragraph.textContent = `Player 2: ${p2NameInput.value} (${p2MarkInput.value})`;
+
+  p2Paragraph.hidden = false;
+
+  p2NameInput.hidden = true;
+  p2MarkInput.hidden = true;
 });
-})
 
 const display = function () {
   const grid = document.querySelector(".grid");
-  grid.innerHTML = "";
-  GameBoard.gridReturn().forEach((element) => {
-    let gridItem = document.createElement("p");
-    console.log(element);
+  const renderGrid=()=>{ 
+    console.log("renderGrid executed")
+    grid.textContent = ""
+
+  GameBoard.gridReturn().forEach((cell,index) => {
+    console.log("celda:", cell, "index:", index);
+    let gridItem = document.createElement("div");
     gridItem.classList.add("cell");
-    gridItem.textContent = element;
-    gridItem.addEventListener("click",()=>{
-      gridItem.textContent = player.getMark
-      game.play
-    })
+    gridItem.textContent = cell;
+
+    gridItem.addEventListener("click", () => {
+      const result = game.playTurn(index);
+      renderGrid()
+
+      if (result){
+        alert(result)
+      }
+    });
+
     grid.append(gridItem);
   });
 
-  function names(p1,p2){
-   const play1 = document.createElement("h2")
-    play1.classList.add("players")
-    play1.textContent = p1
-   const  play2 = document.createElement("h2")
-    play2.classList.add("players")
-    play2.textContent = p2
-    document.querySelector(".playerContainer").append(play1,play2)
   }
-  return {
-    names,
+  
+  const setupPlayers = () => {
+    setting.addEventListener("click", () => {
 
-  }
+      const p1Name = document.querySelector("#player1").value;
+      const p1Mark = document.querySelector("#mark1").value;
+      const p2Name = document.querySelector("#player2").value;
+      const p2Mark = document.querySelector("#mark2").value;
+
+      game.start(p1Name, p1Mark, p2Name, p2Mark);
+
+      renderGrid();
+    });
+  };
+
+  return {
+    setupPlayers,
+  };
 };
 
 const GameBoard = (function () {
   const maker = {
-    board: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    board: ["", "", "", "", "", "", "", "", ""],
   };
   function gridSetter(index, mark) {
+    if (maker.board[index]===""){
     maker.board[index] = mark;
+    return true
+  }
+    
+  return false
   }
   function gridMaker() {
     let output = "";
@@ -64,9 +96,9 @@ const GameBoard = (function () {
     return output;
   }
   gridReturn = () => maker.board;
-
+  gridReset = ()=>  maker.board = ["", "", "", "", "", "", "", "", ""];
   gridMaker(maker.board);
-
+  
   return {
     gridReturn,
     gridSetter,
@@ -74,34 +106,19 @@ const GameBoard = (function () {
   };
 })();
 
-
-const player = function (name,mark) {
+const player = function (name, mark) {
   let pName = name;
   let pMark = mark;
-  let turn = 0;
   const getName = () => pName;
   const getMark = () => pMark;
-  const getTurn = () => turn;
-  const addTurn = () => turn++;
-  const Select = (el) => (choice = el);
-  const getSelect = () => choice;
-
   return {
     getName,
     getMark,
-    getTurn,
-    addTurn,
-    Select,
-    getSelect,
   };
 };
 
-function game(p1,mk1,p2,mk2) {
-
-  let ActualPlayer = "";
-  generalTurn = 0;
-  let player1 = player(p1,mk1);
-  let player2 = player(p2,mk2);
+const  game = (function() {
+  
   const patterns = [
     [0, 1, 2],
     [3, 4, 5],
@@ -112,58 +129,47 @@ function game(p1,mk1,p2,mk2) {
     [0, 4, 8],
     [2, 4, 6],
   ];
-
-  function checkPattern(board) {
-    return patterns.some((pattern) => {
-      const [a, b, c] = pattern;
-      return (
-        board[a] === board[b] &&
-        board[b] === board[c] &&
-        typeof board[a] === "string"
-      );
-    });
-  }
-
-  function checkWinner() {
-    if (checkPattern(GameBoard.gridReturn())) {
-      return ` \x1b[32m${ActualPlayer}\x1b[0m has won!`;
-    } else {
-      return "game keeps going";
+  
+  const start = (p1Name, p1Mark, p2Name, p2Mark) => {
+     player1 = player(p1Name, p1Mark);
+     player2 = player(p2Name, p2Mark);
+    currentPlayer = player1;
+  };
+const playTurn = (index) => {
+  console.log(currentPlayer);
+console.log(typeof currentPlayer);
+    if (GameBoard.gridSetter(index, currentPlayer.getMark())) {
+      if (checkWinner()) {
+        return `${currentPlayer.getName()} won!`;
+      }
+      switchPlayer();
     }
-  }
-  addGTurn = () => generalTurn++;
-  function play(player) {
-    player.addTurn();
-    addGTurn();
-    
-    ActualPlayer = player.getName();
-  }
+    return null;
+  };
+
+  const switchPlayer = () => {
+    currentPlayer = currentPlayer === player1 ? player2 : player1;
+  };
+ 
+  const checkWinner = () => {
+    const board = GameBoard.gridReturn();
+    return patterns.some(([a,b,c]) =>
+      board[a] &&
+      board[a] === board[b] &&
+      board[b] === board[c]
+    );
+  };
+
+  const getCurrentPlayer = () => currentPlayer;
+
+
+ 
 
   return {
-    player1,
-    player2,
-    play,
-    addGTurn,
-    checkPattern,
-    checkWinner,
+    playTurn,
+    start,
+    getCurrentPlayer,
   };
-}
-const myGame = game('john',"x", 'rambo',"O")
-
-display.names(
-  myGame.player1.getName(),
-  myGame.player2.getName()
-);
-// const myGame = game("pepe", "juan");
-// myGame.play(myGame.player1);
-// myGame.play(myGame.player2);
-// GameBoard.gridSetter(4, "x");
-// GameBoard.gridSetter(5, "x");
-// GameBoard.gridSetter(3, "x");
-// console.log(GameBoard.gridMaker(GameBoard.gridReturn));
-
-// console.log(myGame.checkWinner());
-
-
-
-// console.log("\x1b[37m player turn X\x1b[0m");
+} )()
+displayController = display()
+displayController.setupPlayers()

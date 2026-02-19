@@ -9,10 +9,17 @@
   <body>
     <h1>tic tac toe</h1>
     <div class="info">
-        <label for="p1name">player 1 name <input type="text" /></label>
-        <label for="p1mark">mark<input type="text" /></label>
-        <label for="p2name">player 2 name<input type="text" /></label>
-        <label for="p2mark">mark<input type="text" /></label>
+        <div class="p1">
+          <label for="p1name">player 1 name <input id="player1" /></label>
+          <p hidden></p>
+          <label for="p1mark" id="">mark<input id="mark1" type="text" /></label>
+
+        </div>
+        <div class="p2">
+          <label for="p2name">player 2 name<input id="player2" /></label>
+          <p hidden></p>
+          <label for="p2mark" id="">mark<input id="mark2" type="text" /></label>
+        </div>
         <button id="setter" type="button">submit</button>
     </div>
 

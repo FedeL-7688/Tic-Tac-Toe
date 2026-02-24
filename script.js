@@ -1,31 +1,38 @@
 
 let setting = document.querySelector("#setter");
 let info = document.querySelector(".info");
-setting.addEventListener("click", () => {
-  const p1Container = document.querySelector(".p1");
-  const p1NameInput = document.querySelector("#player1");
-  const p1MarkInput = document.querySelector("#mark1");
-  const p1Paragraph = p1Container.querySelector("p");
+const gameGrid = document.querySelector(".grid")
 
-  p1Paragraph.textContent = `Player 1: ${p1NameInput.value} (${p1MarkInput.value})`;
+// setting.addEventListener("click", (e) => {
+//   e.preventDefault();
 
-  p1Paragraph.hidden = false;
+//   const p1Container = document.querySelector(".p1");
+//   const p1NameInput = document.querySelector("#player1");
+//   const p1MarkInput = document.querySelector("#mark1");
+//   const p1Para = p1Container.querySelector("p");
 
-  p1NameInput.hidden = true;
-  p1MarkInput.hidden = true;
+//   p1Para.textContent = `Player 1: ${p1NameInput.value} (${p1MarkInput.value})`;
 
-  const p2Container = document.querySelector(".p2");
-  const p2NameInput = document.querySelector("#player2");
-  const p2MarkInput = document.querySelector("#mark2");
-  const p2Paragraph = p2Container.querySelector("p");
+//   p1Para.hidden = false;
 
-  p2Paragraph.textContent = `Player 2: ${p2NameInput.value} (${p2MarkInput.value})`;
+//   p1NameInput.hidden = true;
+//   p1MarkInput.hidden = true;
 
-  p2Paragraph.hidden = false;
+//   const p2Container = document.querySelector(".p2");
+//   const p2NameInput = document.querySelector("#player2");
+//   const p2MarkInput = document.querySelector("#mark2");
+//   const p2Para = p2Container.querySelector("p");
 
-  p2NameInput.hidden = true;
-  p2MarkInput.hidden = true;
-});
+//   p2Para.textContent = `Player 2: ${p2NameInput.value} (${p2MarkInput.value})`;
+
+//   p2Para.hidden = false;
+
+//   p2NameInput.hidden = true;
+//   p2MarkInput.hidden = true;
+//   gameGrid.classList.remove("hidden");
+  
+
+// });
 
 const display = function () {
   const grid = document.querySelector(".grid");
@@ -50,18 +57,42 @@ const display = function () {
 
     grid.append(gridItem);
   });
-
+  
   }
   
   const setupPlayers = () => {
-    setting.addEventListener("click", () => {
+    setting.addEventListener("click", (e) => {
 
-      const p1Name = document.querySelector("#player1").value;
-      const p1Mark = document.querySelector("#mark1").value;
-      const p2Name = document.querySelector("#player2").value;
-      const p2Mark = document.querySelector("#mark2").value;
+      e.preventDefault();
 
-      game.start(p1Name, p1Mark, p2Name, p2Mark);
+  const p1Container = document.querySelector(".p1");
+  const p1NameInput = document.querySelector("#player1");
+  const p1MarkInput = document.querySelector("#mark1");
+  const p1Para = p1Container.querySelector("p");
+
+  p1Para.textContent = `Player 1: ${p1NameInput.value} (${p1MarkInput.value})`;
+
+  p1Para.hidden = false;
+
+  p1NameInput.hidden = true;
+  p1MarkInput.hidden = true;
+
+  const p2Container = document.querySelector(".p2");
+  const p2NameInput = document.querySelector("#player2");
+  const p2MarkInput = document.querySelector("#mark2");
+  const p2Para = p2Container.querySelector("p");
+
+  p2Para.textContent = `Player 2: ${p2NameInput.value} (${p2MarkInput.value})`;
+
+  p2Para.hidden = false;
+
+  p2NameInput.hidden = true;
+  p2MarkInput.hidden = true;
+  gameGrid.classList.remove("hidden");
+  
+      
+
+      game.start(p1NameInput.value, p1MarkInput.value, p2NameInput.value, p2MarkInput.value);
 
       renderGrid();
     });
@@ -118,7 +149,9 @@ const player = function (name, mark) {
 };
 
 const  game = (function() {
-  
+  let player1
+  let player2
+  let currentPlayer
   const patterns = [
     [0, 1, 2],
     [3, 4, 5],
@@ -133,7 +166,7 @@ const  game = (function() {
   const start = (p1Name, p1Mark, p2Name, p2Mark) => {
      player1 = player(p1Name, p1Mark);
      player2 = player(p2Name, p2Mark);
-    currentPlayer = player1;
+     currentPlayer = player1;
   };
 const playTurn = (index) => {
   console.log(currentPlayer);

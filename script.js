@@ -3,41 +3,9 @@ let setting = document.querySelector("#setter");
 let info = document.querySelector(".info");
 const gameGrid = document.querySelector(".grid")
 
-// setting.addEventListener("click", (e) => {
-//   e.preventDefault();
-
-//   const p1Container = document.querySelector(".p1");
-//   const p1NameInput = document.querySelector("#player1");
-//   const p1MarkInput = document.querySelector("#mark1");
-//   const p1Para = p1Container.querySelector("p");
-
-//   p1Para.textContent = `Player 1: ${p1NameInput.value} (${p1MarkInput.value})`;
-
-//   p1Para.hidden = false;
-
-//   p1NameInput.hidden = true;
-//   p1MarkInput.hidden = true;
-
-//   const p2Container = document.querySelector(".p2");
-//   const p2NameInput = document.querySelector("#player2");
-//   const p2MarkInput = document.querySelector("#mark2");
-//   const p2Para = p2Container.querySelector("p");
-
-//   p2Para.textContent = `Player 2: ${p2NameInput.value} (${p2MarkInput.value})`;
-
-//   p2Para.hidden = false;
-
-//   p2NameInput.hidden = true;
-//   p2MarkInput.hidden = true;
-//   gameGrid.classList.remove("hidden");
-  
-
-// });
-
 const display = function () {
   const grid = document.querySelector(".grid");
   const renderGrid=()=>{ 
-    console.log("renderGrid executed")
     grid.textContent = ""
 
   GameBoard.gridReturn().forEach((cell,index) => {
@@ -82,7 +50,7 @@ const display = function () {
   const p2MarkInput = document.querySelector("#mark2");
   const p2Para = p2Container.querySelector("p");
 
-  p2Para.textContent = `Player 2: ${p2NameInput.value} (${p2MarkInput.value})`;
+  p2Para.textContent= `Player 2:${p2NameInput.value} (${p2MarkInput.value})`;
 
   p2Para.hidden = false;
 
@@ -90,11 +58,24 @@ const display = function () {
   p2MarkInput.hidden = true;
   gameGrid.classList.remove("hidden");
   
+  resetBtn = document.createElement("button")
+  resetBtn.classList.add("reset")
+  resetBtn.textContent = "restart";
+  resetBtn.addEventListener("click",()=>{
+    GameBoard.gridReset()
+    
+    game.start(p1NameInput.value, p1MarkInput.value, p2NameInput.value, p2MarkInput.value);
+ })
+  resetCont = document.querySelector(".resetCont")
+  resetCont.append(resetBtn)
+ 
+  
+ 
       
 
-      game.start(p1NameInput.value, p1MarkInput.value, p2NameInput.value, p2MarkInput.value);
+  game.start(p1NameInput.value, p1MarkInput.value, p2NameInput.value, p2MarkInput.value);
 
-      renderGrid();
+  renderGrid();
     });
   };
 
@@ -134,6 +115,7 @@ const GameBoard = (function () {
     gridReturn,
     gridSetter,
     gridMaker,
+    gridReset,
   };
 })();
 
@@ -169,11 +151,12 @@ const  game = (function() {
      currentPlayer = player1;
   };
 const playTurn = (index) => {
-  console.log(currentPlayer);
-console.log(typeof currentPlayer);
     if (GameBoard.gridSetter(index, currentPlayer.getMark())) {
       if (checkWinner()) {
         return `${currentPlayer.getName()} won!`;
+      }
+      if(checkTie()){
+        return `It's a tie!!!`
       }
       switchPlayer();
     }
@@ -183,7 +166,9 @@ console.log(typeof currentPlayer);
   const switchPlayer = () => {
     currentPlayer = currentPlayer === player1 ? player2 : player1;
   };
- 
+  const checkTie = () =>{
+    return !GameBoard.gridReturn().includes("");
+  }
   const checkWinner = () => {
     const board = GameBoard.gridReturn();
     return patterns.some(([a,b,c]) =>
